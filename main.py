@@ -21,8 +21,9 @@ def keep_alive():
   t.start()
 
 
-# Discord Bot Setup
+# Discord Bot Setup with explicit message content intent
 intents = discord.Intents.default()
+intents.message_content = True
 client = discord.Client(intents=intents)
 
 
