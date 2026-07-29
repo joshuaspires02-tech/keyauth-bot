@@ -1,33 +1,19 @@
 import os
-import discord
-from discord.ext import commands
+from threading import Thread
+from flask import Flask
 
-intents = discord.Intents.default()
-bot = commands.Bot(command_prefix="!", intents=intents)
+app = Flask('')
 
-class KeySystemView(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=None)
+@app.route('/')
+def home():
+    return "Bot is alive!"
 
-    @discord.ui.button(label="Get Key", style=discord.ButtonStyle.green)
-    async def get_key(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("Here is your key!", ephemeral=True)
+def run():
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
 
-    @discord.ui.button(label="Booster", style=discord.ButtonStyle.blurple)
-    async def booster(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("Booster perks info!", ephemeral=True)
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
 
-    @discord.ui.button(label="Lifetime", style=discord.ButtonStyle.red)
-    async def lifetime(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("Lifetime info!", ephemeral=True)
-
-@bot.event
-async def on_ready():
-    print(f"Logged in as {bot.user}")
-
-@bot.command()
-async def panel(ctx):
-    view = KeySystemView()
-    await ctx.send("Click a button below:", view=view)
-
-bot.run(os.getenv("DISCORD_TOKEN"))
+keep_alive()
