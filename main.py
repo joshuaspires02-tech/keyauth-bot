@@ -1,3 +1,6 @@
+import discord
+
+
 @discord.ui.button(
     label="Get Key",
     style=discord.ButtonStyle.green,
@@ -11,3 +14,4 @@ async def get_key_button(
   await interaction.response.send_message(
       f"🔑 `{k}`", ephemeral=True
   )
+
